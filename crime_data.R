@@ -22,6 +22,7 @@ boxplot(crime_data$ViolentCrimesPerPop)
 #These may be the points we most want to know about so dont throw them away
 
 #To fix this problem - transform the data
+#We do not need to scale the data because all attributes are alreay between 0 and 1
 #Note: If skewness value lies above +1 or below -1, data is highly skewed. If it lies between +0.5 to -0.5, it is moderately skewed. If the value is 0, then the data is symmetric
 library(e1071)
 skewness(crime_data$ViolentCrimesPerPop) # highly skewed
@@ -83,6 +84,19 @@ for (i in 1:ncol(list_attr)){
   }
   hist(list_attr[,i])
 }
- #the race data is still skewed but the rest looks good 
-  
-  
+ #the race data is still skewed but the rest looks good
+
+#Lets try a model using these factors
+mod.most_cor = lm(ViolentCrimesPerPop~racepctblack+ pctWPubAsst+TotalPctDiv+MalePctDivorce+ FemalePctDiv+PctIlleg+PctFam2Par+racePctWhite+ PctKids2Par+ PctYoungKids2Par+ PctTeen2Par, data = crime_data)
+plot(mod.most_cor)  #looks like there's some outliers, also large residuals
+summary(mod.most_cor)
+
+#What happens when we remove 376,774,1231 (the outliers)
+crime_data_rmo = crime_data[-c(376,774,1231),]
+mod.most_cor = lm(ViolentCrimesPerPop~racepctblack+ pctWPubAsst+TotalPctDiv+MalePctDivorce+ FemalePctDiv+PctIlleg+PctFam2Par+racePctWhite+ PctKids2Par+ PctYoungKids2Par+ PctTeen2Par, data = crime_data_rmo)
+plot(mod.most_cor)  #looks like there's some outliers, also large residuals
+summary(mod.most_cor)
+
+#there doesn't seem to be much difference
+
+#Lets see if the attributes we're using are really the best by doing PCA
