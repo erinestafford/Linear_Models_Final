@@ -51,10 +51,38 @@ c = cor(na.omit(crime_data))
 corr_vc = c[101,]
 length(which(corr_vc > 0.55)) 
 
-#the values that satisfy which(corr_vc > 0.6) are the 4 most correlated (positive)
+#the values that satisfy which(corr_vc > 0.6) are the 7 most correlated (positive)
 pairs(crime_data[which(corr_vc > 0.55)])
 
 length(which(corr_vc < -0.65)) 
 pairs(cbind(crime_data[which(corr_vc < -0.65)],crime_data$ViolentCrimesPerPop))
 #the values that satisfy which(corr_vc < -0.65) are the 5 most correlated (negative)
 
+#For now we will loot at
+#racepctblack, pctWPubAsst, MalePctDivorce, FemalePctDiv,TotalPctDiv,PctIlleg +
+#racePctWhite,PctFam2Par, PctKids2Par, PctYoungKids2Par, PctTeen2Par -
+
+#These are probably highly correlated with each other, but we'll go back to that
+
+#Are these highly correlated attributes normally distributed? -no
+hist((crime_data$racepctblack)^(1/3))
+skewness((crime_data$racepctblack)^(1/3)) #needed transformation
+
+hist((crime_data$pctWPubAsst)) #need transformation
+hist((crime_data$pctWPubAsst)^(1/3))
+skewness((crime_data$pctWPubAsst)^(1/3))
+
+hist((crime_data$MalePctDivorce)) #this one is fine
+skewness((crime_data$MalePctDivorce))
+
+#speed this process up
+list_attr = cbind(crime_data$racepctblack, crime_data$pctWPubAsst, crime_data$MalePctDivorce, crime_data$FemalePctDiv,crime_data$TotalPctDiv,crime_data$PctIlleg,crime_data$racePctWhite,crime_data$PctFam2Par, crime_data$PctKids2Par, crime_data$PctYoungKids2Par, crime_data$PctTeen2Par)
+for (i in 1:ncol(list_attr)){
+  if (skewness(list_attr[,i]) > 0.5){
+    list_attr[,i] = list_attr[,i]^(1/3)
+  }
+  hist(list_attr[,i])
+}
+ #the race data is still skewed but the rest looks good 
+  
+  
