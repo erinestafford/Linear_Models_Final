@@ -53,15 +53,16 @@ boxplot(crime_data$ViolentCrimesPerPop)
 #look at correlations to see which attributes are most correlated with violont crime (vc)
 c = cor(na.omit(crime_data))
 corr_vc = c[101,]
-length(which(corr_vc > 0.55)) 
+length(which(corr_vc > 0.65)) +  length(which(corr_vc < -0.65)) 
 
 #the values that satisfy which(corr_vc > 0.6) are the 7 most correlated (positive)
-pairs(crime_data[which(corr_vc > 0.55)])
+pairs(crime_data[which(corr_vc > 0.5)])
 
 length(which(corr_vc < -0.65)) 
 pairs(cbind(crime_data[which(corr_vc < -0.65)],crime_data$ViolentCrimesPerPop))
 #the values that satisfy which(corr_vc < -0.65) are the 5 most correlated (negative)
 
+pairs(cbind(crime_data[,which(corr_vc > 0.65)],crime_data[,which(corr_vc < -0.65)]))
 #For now we will loot at
 #racepctblack, pctWPubAsst, MalePctDivorce, FemalePctDiv,TotalPctDiv,PctIlleg +
 #racePctWhite,PctFam2Par, PctKids2Par, PctYoungKids2Par, PctTeen2Par -
@@ -95,14 +96,14 @@ for (i in 1:ncol(crime_data)){
     }
     
   }
-  hist(crime_data[,i])
 }
 
 
 #Lets try a model using these factors
-mod.most_cor_all = lm(ViolentCrimesPerPop~racepctblack+ pctWPubAsst+TotalPctDiv+MalePctDivorce+ FemalePctDiv+PctIlleg+PctFam2Par+racePctWhite+ PctKids2Par+ PctYoungKids2Par+ PctTeen2Par, data = crime_data)
+mod.most_cor_all = lm(ViolentCrimesPerPop~racepctblack+ pctWPubAsst+TotalPctDiv+PctIlleg+NumIlleg+PctKids2Par+PctFam2Par+PctYoungKids2Par+PctTeen2Par+racePctWhite + pctWInvInc +NumUnderPov+PctPopUnderPov+FemalePctDiv, data = crime_data)
 plot(mod.most_cor_all)  #looks like there's some outliers, also large residuals
-summary(mod.most_cor_all) #0.6548
+summary(mod.most_cor_all) #0.67
+shapiro.test(mod.most_cor_all$residuals)
 
 #Looking at variance inflation factors
 library(faraway)
