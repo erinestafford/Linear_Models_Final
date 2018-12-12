@@ -13,7 +13,7 @@ crime_data = cbind(crime_data[-c(1:5,127,125:122,118:102,129)])
 crime_data =na.omit(crime_data)
 
 #look at distribution of violent crime
-hist(crime_data$ViolentCrimesPerPop) # this is not normally distributed - skewed
+hist(crime_data$ViolentCrimesPerPop, "main" = 'Histogram of Violent Crimes per Capita', xlab = 'Violent Crimes per Capita') # this is not normally distributed - skewed
 
 # further proof of skew
 qqnorm(crime_data$ViolentCrimesPerPop) 
@@ -41,7 +41,7 @@ skewness((crime_data$ViolentCrimesPerPop)^(1/3)) #moderately skewed, but looks t
 #apply transformation
 crime_data$ViolentCrimesPerPop = (crime_data$ViolentCrimesPerPop)^(1/3)
 #look at new distribution of violent crime
-hist(crime_data$ViolentCrimesPerPop) # this is not normally distributed - skewed
+hist(crime_data$ViolentCrimesPerPop,"main" = 'Histogram of Violent Crimes per Capita', xlab = 'Violent Crimes per Capita') # this is not normally distributed - skewed
 
 #Much better
 qqnorm(crime_data$ViolentCrimesPerPop) 
@@ -81,12 +81,23 @@ skewness((crime_data$MalePctDivorce))
 
 #speed this process up
 for (i in 1:ncol(crime_data)){
-  if (skewness(crime_data[,i]) > 0.5){
-    crime_data[,i] = crime_data[,i]^(1/3)
+  if (skewness(crime_data[,i]) > 0.5 ||skewness(crime_data[,i]) < -0.5 ){
+    #perform a transformation
+    s3 = abs(skewness(crime_data[,i]^(1/3)))
+    s2 = abs(skewness(sqrt(crime_data[,i])))
+    s0 = skewness(crime_data[,i])
+    m = min(s3,s2,s0)
+    if(m==s2){
+      crime_data[,i] = sqrt(crime_data[,i])
+    }
+    if(m==s3){
+      crime_data[,i] = (crime_data[,i])^(1/3)
+    }
+    
   }
   hist(crime_data[,i])
 }
- #the race data is still skewed but the rest looks good
+
 
 #Lets try a model using these factors
 mod.most_cor_all = lm(ViolentCrimesPerPop~racepctblack+ pctWPubAsst+TotalPctDiv+MalePctDivorce+ FemalePctDiv+PctIlleg+PctFam2Par+racePctWhite+ PctKids2Par+ PctYoungKids2Par+ PctTeen2Par, data = crime_data)
@@ -113,7 +124,7 @@ shapiro.test(studres(mod.most_cor_all)) #they are significantly different from n
 crime_data_rmo = crime_data[-c(376,774,1231),]
 mod.most_cor_rm_outliers = lm(ViolentCrimesPerPop~racepctblack+ pctWPubAsst+TotalPctDiv+MalePctDivorce+ FemalePctDiv+PctIlleg+PctFam2Par+racePctWhite+ PctKids2Par+ PctYoungKids2Par+ PctTeen2Par, data = crime_data_rmo)
 plot(mod.most_cor_rm_outliers)  #looks like there's some outliers, also large residuals
-summary(mod.most_cor_rm_outliers)
+summary(mod.most_cor_rm_outliers)#0.655
 
 #Does this improve the normality of the residuals?
 qqnorm(studres(mod.most_cor_rm_outliers))

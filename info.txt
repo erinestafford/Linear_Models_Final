@@ -1,0 +1,114 @@
+agePct65up& percentage of population that is 65 and over in age \\ \hline 
+ numbUrban& number of people living in areas classified as urban \\ \hline 
+ pctUrban& percentage of people living in areas classified as urban \\ \hline 
+ medIncome& median household income \\ \hline 
+ pctWWage& percentage of households with wage or salary income in 1989 \\ \hline 
+ pctWFarmSelf& percentage of households with farm or self employment income in 1989 \\ \hline 
+ pctWInvInc& percentage of households with investment / rent income in 1989 \\ \hline 
+ pctWSocSec& percentage of households with social security income in 1989 \\ \hline 
+ pctWPubAsst& percentage of households with public assistance income in 1989 \\ \hline 
+ pctWRetire& percentage of households with retirement income in 1989 \\ \hline 
+ medFamInc& median family income (differs from household income for non-family households) \\ \hline 
+ perCapInc& per capita income \\ \hline 
+ whitePerCap& per capita income for caucasians \\ \hline 
+ blackPerCap& per capita income for african americans \\ \hline 
+ indianPerCap& per capita income for native americans \\ \hline 
+ AsianPerCap& per capita income for people with asian heritage \\ \hline 
+ OtherPerCap& per capita income for people with 'other' heritage \\ \hline 
+ HispPerCap& per capita income for people with hispanic heritage \\ \hline 
+ NumUnderPov& number of people under the poverty level \\ \hline 
+ PctPopUnderPov& percentage of people under the poverty level \\ \hline 
+ PctLess9thGrade& percentage of people 25 and over with less than a 9th grade education \\ \hline 
+ PctNotHSGrad& percentage of people 25 and over that are not high school graduates \\ \hline 
+ PctBSorMore& percentage of people 25 and over with a bachelors degree or higher education \\ \hline 
+ PctUnemployed& percentage of people 16 and over, in the labor force, and unemployed \\ \hline 
+ PctEmploy& percentage of people 16 and over who are employed \\ \hline 
+ PctEmplManu& percentage of people 16 and over who are employed in manufacturing \\ \hline 
+ PctEmplProfServ& percentage of people 16 and over who are employed in professional services \\ \hline 
+ PctOccupManu& percentage of people 16 and over who are employed in manufacturing \\ \hline ######## 
+ PctOccupMgmtProf& percentage of people 16 and over who are employed in management or professional occupations \\ \hline 
+ MalePctDivorce& percentage of males who are divorced \\ \hline 
+ MalePctNevMarr& percentage of males who have never married \\ \hline 
+ FemalePctDiv& percentage of females who are divorced \\ \hline 
+ TotalPctDiv& percentage of population who are divorced \\ \hline 
+ PersPerFam& mean number of people per family \\ \hline 
+ PctFam2Par& percentage of families (with kids) that are headed by two parents \\ \hline 
+ PctKids2Par& percentage of kids in family housing with two parents \\ \hline 
+ PctYoungKids2Par& percent of kids 4 and under in two parent households \\ \hline 
+ PctTeen2Par& percent of kids age 12-17 in two parent households \\ \hline 
+ PctWorkMomYoungKids& percentage of moms of kids 6 and under in labor force \\ \hline 
+ PctWorkMom& percentage of moms of kids under 18 in labor force \\ \hline 
+ NumIlleg& number of kids born to never married \\ \hline 
+ PctIlleg& percentage of kids born to never married \\ \hline 
+ NumImmig& total number of people known to be foreign born \\ \hline 
+ PctImmigRecent& percentage of _immigrants_ who immigated within last 3 years \\ \hline 
+ PctImmigRec5& percentage of _immigrants_ who immigated within last 5 years \\ \hline 
+ PctImmigRec8& percentage of _immigrants_ who immigated within last 8 years \\ \hline 
+ PctImmigRec10& percentage of _immigrants_ who immigated within last 10 years \\ \hline 
+ PctRecentImmig& percent of _population_ who have immigrated within the last 3 years \\ \hline 
+ PctRecImmig5& percent of _population_ who have immigrated within the last 5 years \\ \hline 
+ PctRecImmig8& percent of _population_ who have immigrated within the last 8 years \\ \hline 
+ PctRecImmig10& percent of _population_ who have immigrated within the last 10 years \\ \hline 
+ PctSpeakEnglOnly& percent of people who speak only English \\ \hline 
+ PctNotSpeakEnglWell& percent of people who do not speak English well \\ \hline 
+ PctLargHouseFam& percent of family households that are large (6 or more) \\ \hline 
+ PctLargHouseOccup& percent of all occupied households that are large (6 or more people) \\ \hline 
+ PersPerOccupHous& mean persons per household \\ \hline 
+ PersPerOwnOccHous& mean persons per owner occupied household \\ \hline 
+ PersPerRentOccHous& mean persons per rental household \\ \hline 
+ PctPersOwnOccup& percent of people in owner occupied households \\ \hline 
+ PctPersDenseHous& percent of persons in dense housing (more than 1 person per room) \\ \hline 
+ PctHousLess3BR& percent of housing units with less than 3 bedrooms \\ \hline 
+ MedNumBR& median number of bedrooms \\ \hline 
+ HousVacant& number of vacant households \\ \hline 
+ PctHousOccup& percent of housing occupied \\ \hline 
+ PctHousOwnOcc& percent of households owner occupied \\ \hline 
+ PctVacantBoarded& percent of vacant housing that is boarded up \\ \hline 
+ PctVacMore6Mos& percent of vacant housing that has been vacant more than 6 months \\ \hline 
+ MedYrHousBuilt& median year housing units built \\ \hline 
+ PctHousNoPhone& percent of occupied housing units without phone (in 1990, this was rare!) \\ \hline 
+ PctWOFullPlumb& percent of housing without complete plumbing facilities \\ \hline 
+ OwnOccLowQuart& owner occupied housing - lower quartile value \\ \hline 
+ OwnOccMedVal& owner occupied housing - median value \\ \hline 
+ OwnOccHiQuart& owner occupied housing - upper quartile value \\ \hline 
+ RentLowQ& rental housing - lower quartile rent \\ \hline 
+ RentMedian& rental housing - median rent (Census variable H32B from file STF1A) \\ \hline 
+ RentHighQ& rental housing - upper quartile rent \\ \hline 
+ MedRent& median gross rent (Census variable H43A from file STF3A - includes utilities) \\ \hline 
+ MedRentPctHousInc& median gross rent as a percentage of household income \\ \hline 
+ MedOwnCostPctInc& median owners cost as a percentage of household income - for owners with a mortgage \\ \hline 
+ MedOwnCostPctIncNoMtg& median owners cost as a percentage of household income - for owners without a mortgage \\ \hline 
+ NumInShelters& number of people in homeless shelters \\ \hline 
+ NumStreet& number of homeless people counted in the street \\ \hline 
+ PctForeignBorn& percent of people foreign born \\ \hline 
+ PctBornSameState& percent of people born in the same state as currently living \\ \hline 
+ PctSameHouse85& percent of people living in the same house as in 1985 (5 years before) \\ \hline 
+ PctSameCity85& percent of people living in the same city as in 1985 (5 years before) \\ \hline 
+ PctSameState85& percent of people living in the same state as in 1985 (5 years before) \\ \hline 
+ LemasSwornFT& number of sworn full time police officers \\ \hline 
+ LemasSwFTPerPop& sworn full time police officers per 100K population \\ \hline 
+ LemasSwFTFieldOps& number of sworn full time police officers in field operations (on the street as opposed to administrative etc) \\ \hline 
+ LemasSwFTFieldPerPop& sworn full time police officers in field operations (on the street as opposed to administrative etc) per 100K population \\ \hline 
+ LemasTotalReq& total requests for police \\ \hline 
+ LemasTotReqPerPop& total requests for police per 100K popuation \\ \hline 
+ PolicReqPerOffic& total requests for police per police officer \\ \hline 
+ PolicPerPop& police officers per 100K population \\ \hline 
+ RacialMatchCommPol& a measure of the racial match between the community and the police force. High values indicate proportions in community and police force are similar \\ \hline 
+ PctPolicWhite& percent of police that are caucasian \\ \hline 
+ PctPolicBlack& percent of police that are african american \\ \hline 
+ PctPolicHisp& percent of police that are hispanic \\ \hline 
+ PctPolicAsian& percent of police that are asian \\ \hline 
+ PctPolicMinor& percent of police that are minority of any kind \\ \hline 
+ OfficAssgnDrugUnits& number of officers assigned to special drug units \\ \hline 
+ NumKindsDrugsSeiz& number of different kinds of drugs seized \\ \hline 
+ PolicAveOTWorked& police average overtime worked \\ \hline 
+ LandArea& land area in square miles \\ \hline 
+ PopDens& population density in persons per square mile \\ \hline 
+ PctUsePubTrans& percent of people using public transit for commuting \\ \hline 
+ PolicCars& number of police cars \\ \hline 
+ PolicOperBudg& police operating budget \\ \hline 
+ LemasPctPolicOnPatr& percent of sworn full time police officers on patrol \\ \hline 
+ LemasGangUnitDeploy& gang unit deployed (numeric - decimal - but really ordinal - 0 means NO, 1 means YES, 0.5 means Part Time) 
+ LemasPctOfficDrugUn& percent of officers assigned to drug units \\ \hline 
+ PolicBudgPerPop& police operating budget per population \\ \hline 
+ ViolentCrimesPerPop& total number of violent crimes per 100K popuation \\ \hline 
