@@ -214,6 +214,31 @@ shapiro.test(studres(crime.step.bf)) #3.52e-12 worse
 qqnorm(studres(crime.step.bf))
 qqline(studres(crime.step.bf))
 
+#Remove outliers is needed
+plot(hatvalues(crime.step.bf),ylab  = "Hat Values", main = "Determining Points of High Leverage")
+identify(hatvalues(crime.step.bf))
+#587,927,957,1638,955,1070
+crime_data_rm_hl = crime_data[-c(587,927,957,1638,955,1070,376,1231,774,343),]
+mod.aic_removehl = lm(formula = ViolentCrimesPerPop ~ population + racepctblack + 
+                 racePctWhite + racePctHisp + agePct12t29 + agePct65up + pctUrban + 
+                 pctWWage + pctWInvInc + pctWRetire + medFamInc + whitePerCap + 
+                 blackPerCap + indianPerCap + OtherPerCap + PctEmploy + PctEmplManu + 
+                 MalePctDivorce + MalePctNevMarr + PctKids2Par + PctWorkMomYoungKids + 
+                 PctWorkMom + PctIlleg + NumImmig + PctImmigRec10 + PersPerRentOccHous + 
+                 PctPersOwnOccup + PctPersDenseHous + PctHousOccup + PctHousOwnOcc + 
+                 PctVacantBoarded + PctVacMore6Mos + PctWOFullPlumb + OwnOccLowQuart + 
+                 OwnOccMedVal + RentLowQ + MedRent + MedOwnCostPctInc + MedOwnCostPctIncNoMtg + 
+                 NumInShelters + NumStreet + PctSameCity85 + PctUsePubTrans + 
+                 LemasPctOfficDrugUn + PctPopUnderPov, data = crime_data_rm_hl)
+summary(mod.aic_removehl) #R^2 = 0.7209
+shapiro.test(studres(mod.aic_removehl)) #6.143e-12
+qqnorm(studres(mod.aic_removehl))
+qqline(studres(mod.aic_removehl))
+plot(mod.aic_removehl)
+plot(hatvalues(mod.aic_removehl))
+identify(hatvalues(mod.aic_removehl))
+
+#train/test
 train = crime_data[sample(nrow(crime_data),300),]
 test = crime_data[-as.numeric(row.names(train)),]
 
