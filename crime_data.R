@@ -214,7 +214,7 @@ shapiro.test(studres(crime.step.bf)) #3.52e-12 worse
 qqnorm(studres(crime.step.bf))
 qqline(studres(crime.step.bf))
 
-train = crime_data[sample(nrow(crime_data),1800),]
+train = crime_data[sample(nrow(crime_data),300),]
 test = crime_data[-as.numeric(row.names(train)),]
 
 mod.train = lm(formula = ViolentCrimesPerPop ~ population + racepctblack + 
@@ -228,6 +228,7 @@ mod.train = lm(formula = ViolentCrimesPerPop ~ population + racepctblack +
                  OwnOccMedVal + RentLowQ + MedRent + MedOwnCostPctInc + MedOwnCostPctIncNoMtg + 
                  NumInShelters + NumStreet + PctSameCity85 + PctUsePubTrans + 
                  LemasPctOfficDrugUn + PctPopUnderPov, data = train)
+shapiro.test(studres(mod.train))
 predictions = predict(mod.train, test)
 
 plot(predictions, test[,101], main = "Predicted Values VS Actual Values", xlab = "Predictions",ylab = "Actual Values")
@@ -278,3 +279,22 @@ model <- train(ViolentCrimesPerPop ~ population + racepctblack +
                trControl = train.control)
 # Summarize the results
 print(model)
+
+#Going to try quadratic model on most significant params- did not improve residuals
+quad.mod = lm(ViolentCrimesPerPop ~ population + racepctblack + 
+                racePctWhite + racePctHisp + agePct12t29 + agePct65up + pctUrban + 
+                pctWWage + pctWInvInc + pctWRetire + medFamInc + whitePerCap + 
+                blackPerCap + indianPerCap + OtherPerCap + PctEmploy + PctEmplManu + 
+                MalePctDivorce + MalePctNevMarr + PctKids2Par + PctWorkMomYoungKids + 
+                PctWorkMom + PctIlleg + NumImmig + PctImmigRec10 + PersPerRentOccHous + 
+                PctPersOwnOccup + PctPersDenseHous + PctHousOccup + PctHousOwnOcc + 
+                PctVacantBoarded + PctVacMore6Mos + PctWOFullPlumb + OwnOccLowQuart + 
+                OwnOccMedVal + RentLowQ + MedRent + MedOwnCostPctInc + MedOwnCostPctIncNoMtg + 
+                NumInShelters + NumStreet + PctSameCity85 + PctUsePubTrans + 
+                LemasPctOfficDrugUn + PctPopUnderPov + population^2 + racepctblack^2 + pctUrban^2 + pctWInvInc^2 + whitePerCap^2+
+                PctEmploy^2 + PctKids2Par^2 + RentLowQ^2 + MedRent^2 + MedOwnCostPctIncNoMtg^2, data = crime_data)
+summary(quad.mod)
+plot(quad.mod)
+qqnorm(studres(quad.mod))
+qqline(studres(quad.mod))
+shapiro.test(studres(quad.mod))
