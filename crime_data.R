@@ -97,7 +97,7 @@ for (i in 1:ncol(crime_data)){
     
   }
 }
-
+shapiro.test(crime_data$ViolentCrimesPerPop)
 
 #Lets try a model using these factors
 mod.most_cor_all = lm(ViolentCrimesPerPop~racepctblack+ pctWPubAsst+TotalPctDiv+PctIlleg+NumIlleg+PctKids2Par+PctFam2Par+PctYoungKids2Par+PctTeen2Par+racePctWhite + pctWInvInc +NumUnderPov+PctPopUnderPov+FemalePctDiv, data = crime_data)
@@ -122,8 +122,8 @@ shapiro.test(studres(mod.most_cor_all)) #they are significantly different from n
 
 
 #What happens when we remove 376,774,1231 (the outliers)
-crime_data_rmo = crime_data[-c(376,774,1231),]
-mod.most_cor_rm_outliers = lm(ViolentCrimesPerPop~racepctblack+ pctWPubAsst+TotalPctDiv+MalePctDivorce+ FemalePctDiv+PctIlleg+PctFam2Par+racePctWhite+ PctKids2Par+ PctYoungKids2Par+ PctTeen2Par, data = crime_data_rmo)
+crime_data_rmo = crime_data[-c(376,774,1231,1035),]
+mod.most_cor_rm_outliers = lm(ViolentCrimesPerPop~racepctblack+ pctWPubAsst+TotalPctDiv+PctIlleg+NumIlleg+PctKids2Par+PctFam2Par+PctYoungKids2Par+PctTeen2Par+racePctWhite + pctWInvInc +NumUnderPov+PctPopUnderPov+FemalePctDiv, data = crime_data_rmo)
 plot(mod.most_cor_rm_outliers)  #looks like there's some outliers, also large residuals
 summary(mod.most_cor_rm_outliers)#0.655
 
@@ -135,10 +135,10 @@ shapiro.test(studres(mod.most_cor_rm_outliers)) #they are still significantly di
 
 #high-leverage values: having the most impact on the model
 plot(hatvalues(mod.most_cor_rm_outliers))
-#identify(hatvalues(mod.most_cor))
+identify(hatvalues(mod.most_cor_rm_outliers))
 
 #Lets remove these to see if the results are improved
-crime_data_rmhl = crime_data_rmo[-c(1267,1454,948,141,1033,1634),]
+crime_data_rmhl = crime_data_rmo[-c(1265,1454,948,141,1033,1634,1174,736),]
 mod.most_cor_rm_hatvals = lm(ViolentCrimesPerPop~racepctblack+ pctWPubAsst+TotalPctDiv+MalePctDivorce+ FemalePctDiv+PctIlleg+PctFam2Par+racePctWhite+ PctKids2Par+ PctYoungKids2Par+ PctTeen2Par, data = crime_data_rmhl)
 plot(mod.most_cor_rm_hatvals,which =2)  #looks like there's some outliers, also large residuals
 summary(mod.most_cor_rm_hatvals)
@@ -162,14 +162,22 @@ crime.vars = crime_data[,1:100]
 #How many principal components are needed to provide a good summary of the data? 
 var <- crime.pca$sdev^2
 var.percent <- var/sum(var) * 100
-barplot(var.percent, xlab='PC', ylab='Percent Variance', names.arg=1:length(var.percent), las=1, ylim=c(0, max(var.percent)), col='gray')
-abline(h=1/ncol(crime_data[,1:100])*100, col='red')
-sum(var.percent[1:14])
+barplot(var.percent, ylab='Percent Variance', names.arg=1:length(var.percent), las=1, ylim=c(0, max(var.percent)), col='red', main = 'Barplot of the Variance Explained by the Principal Components', xlab = "Principal Component")
+abline(h=1/ncol(crime_data[,1:100])*100, col='blue')
+sum(var.percent[1:50])
 #according to this we need the first 14 principal components that account for 84.70506 percent of the variance
 
 pca_crime = crime.pca$x
-crime.mod.pca = lm(na.omit(crime_data)$ViolentCrimesPerPop~pca_crime)
-summary(crime.mod.pca) #R^2: 0.7231 - better than model with most correlated variables
+#add a training set with principal components
+train.data <- data.frame(ViolentCrimesPerPop = crime_data$ViolentCrimesPerPop, crime.pca$x)
+
+#we are interested in first 30 PCAs
+train.data <- train.data[,1:51]
+
+
+crime.mod.pca = lm(ViolentCrimesPerPop~., data = train.data)
+summary(crime.mod.pca) #R^2: 0.7094 - better than model with most correlated variables
+plot(crime.mod.pca)
 shapiro.test(studres(crime.mod.pca)) #1.432e-12 worse
 qqnorm(studres(crime.mod.pca))
 qqline(studres(crime.mod.pca))
@@ -181,6 +189,8 @@ summary(crime.mod.pca_rm)
 shapiro.test(studres(crime.mod.pca_rm)) #7.27e-10 better
 qqnorm(studres(crime.mod.pca_rm))
 qqline(studres(crime.mod.pca_rm))
+
+
 
 #Other things to try
 plot(mod.most_cor_all$fitted,mod.most_cor_all$res)
@@ -195,11 +205,76 @@ lines(c(0,25),c(.1,.1)) #so we should be worried about 1270 and 1457
 crime_data_rm_hl =crime_data[-c(1270,1457),]
 
 #Now, lets try an AIC
-crime.1 = lm(ViolentCrimesPerPop~1,data = crime_data_rm_hl)
-crime.full = lm(ViolentCrimesPerPop~., data = crime_data_rm_hl)
+crime.1 = lm(ViolentCrimesPerPop~1,data = crime_data)
+crime.full = lm(ViolentCrimesPerPop~., data = crime_data)
 
 crime.step.bf = stepAIC(crime.full,direction="both",scope = list(lower = crime.1,upper = crime.full))
 summary(crime.step.bf) # R^2 = 0.7182, best
 shapiro.test(studres(crime.step.bf)) #3.52e-12 worse
 qqnorm(studres(crime.step.bf))
 qqline(studres(crime.step.bf))
+
+train = crime_data[sample(nrow(crime_data),1800),]
+test = crime_data[-as.numeric(row.names(train)),]
+
+mod.train = lm(formula = ViolentCrimesPerPop ~ population + racepctblack + 
+                 racePctWhite + racePctHisp + agePct12t29 + agePct65up + pctUrban + 
+                 pctWWage + pctWInvInc + pctWRetire + medFamInc + whitePerCap + 
+                 blackPerCap + indianPerCap + OtherPerCap + PctEmploy + PctEmplManu + 
+                 MalePctDivorce + MalePctNevMarr + PctKids2Par + PctWorkMomYoungKids + 
+                 PctWorkMom + PctIlleg + NumImmig + PctImmigRec10 + PersPerRentOccHous + 
+                 PctPersOwnOccup + PctPersDenseHous + PctHousOccup + PctHousOwnOcc + 
+                 PctVacantBoarded + PctVacMore6Mos + PctWOFullPlumb + OwnOccLowQuart + 
+                 OwnOccMedVal + RentLowQ + MedRent + MedOwnCostPctInc + MedOwnCostPctIncNoMtg + 
+                 NumInShelters + NumStreet + PctSameCity85 + PctUsePubTrans + 
+                 LemasPctOfficDrugUn + PctPopUnderPov, data = train)
+predictions = predict(mod.train, test)
+
+plot(predictions, test[,101], main = "Predicted Values VS Actual Values", xlab = "Predictions",ylab = "Actual Values")
+abline(0,1)
+
+sapply(as.list(data.frame(predictions)), function(y_hat) mean((test$ViolentCrimesPerPop -y_hat)^2))
+
+#Cross Validation
+library(tidyverse)
+library(caret)
+sample_n(crime_data,1000)
+set.seed(123)
+training.samples <- crime_data$ViolentCrimesPerPop %>%
+  createDataPartition(p = 0.8, list = FALSE)
+
+train.data  <- crime_data[training.samples, ]
+test.data <- crime_data[-training.samples, ]
+mod.train = lm(formula = ViolentCrimesPerPop ~ population + racepctblack + 
+                 racePctWhite + racePctHisp + agePct12t29 + agePct65up + pctUrban + 
+                 pctWWage + pctWInvInc + pctWRetire + medFamInc + whitePerCap + 
+                 blackPerCap + indianPerCap + OtherPerCap + PctEmploy + PctEmplManu + 
+                 MalePctDivorce + MalePctNevMarr + PctKids2Par + PctWorkMomYoungKids + 
+                 PctWorkMom + PctIlleg + NumImmig + PctImmigRec10 + PersPerRentOccHous + 
+                 PctPersOwnOccup + PctPersDenseHous + PctHousOccup + PctHousOwnOcc + 
+                 PctVacantBoarded + PctVacMore6Mos + PctWOFullPlumb + OwnOccLowQuart + 
+                 OwnOccMedVal + RentLowQ + MedRent + MedOwnCostPctInc + MedOwnCostPctIncNoMtg + 
+                 NumInShelters + NumStreet + PctSameCity85 + PctUsePubTrans + 
+                 LemasPctOfficDrugUn + PctPopUnderPov, data = train.data)
+predictions <- mod.train %>% predict(test.data)
+data.frame( R2 = R2(predictions, test.data$ViolentCrimesPerPop),
+            RMSE = RMSE(predictions, test.data$ViolentCrimesPerPop),
+            MAE = MAE(predictions, test.data$ViolentCrimesPerPop))
+
+# Define training control
+train.control <- trainControl(method = "LOOCV")
+# Train the model
+model <- train(ViolentCrimesPerPop ~ population + racepctblack + 
+                 racePctWhite + racePctHisp + agePct12t29 + agePct65up + pctUrban + 
+                 pctWWage + pctWInvInc + pctWRetire + medFamInc + whitePerCap + 
+                 blackPerCap + indianPerCap + OtherPerCap + PctEmploy + PctEmplManu + 
+                 MalePctDivorce + MalePctNevMarr + PctKids2Par + PctWorkMomYoungKids + 
+                 PctWorkMom + PctIlleg + NumImmig + PctImmigRec10 + PersPerRentOccHous + 
+                 PctPersOwnOccup + PctPersDenseHous + PctHousOccup + PctHousOwnOcc + 
+                 PctVacantBoarded + PctVacMore6Mos + PctWOFullPlumb + OwnOccLowQuart + 
+                 OwnOccMedVal + RentLowQ + MedRent + MedOwnCostPctInc + MedOwnCostPctIncNoMtg + 
+                 NumInShelters + NumStreet + PctSameCity85 + PctUsePubTrans + 
+                 LemasPctOfficDrugUn + PctPopUnderPov, data = crime_data, method = "lm",
+               trControl = train.control)
+# Summarize the results
+print(model)
